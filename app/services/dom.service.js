@@ -40,9 +40,8 @@ var DOMService = (function () {
 }());
 DOMService = __decorate([
     core_1.Injectable(),
-    __metadata("design:paramtypes", [typeof (_a = typeof core_1.Renderer2 !== "undefined" && core_1.Renderer2) === "function" && _a || Object])
+    __metadata("design:paramtypes", [core_1.Renderer2])
 ], DOMService);
 exports.DOMService = DOMService;
-var _a;
 //Copyright (c) 2017 Alex Tranchenko. All rights reserved.
 //MIT License. 

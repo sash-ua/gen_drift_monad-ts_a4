@@ -19,6 +19,7 @@ var shared_module_1 = require("./shared/shared.module");
 var AppComponent_1 = require("./AppComponent");
 var error_handler_service_1 = require("./services/error.handler.service");
 var hammerjs_config_1 = require("./app.configs/hammerjs.config");
+var store_module_1 = require("./store/store.module");
 var AppModule = (function () {
     function AppModule() {
     }
@@ -32,6 +33,7 @@ AppModule = __decorate([
             shared_module_1.SharedModule,
             core_module_1.CoreModule,
             animations_1.BrowserAnimationsModule,
+            store_module_1.StoreModule.provideStore()
         ],
         declarations: [
             AppComponent_1.AppComponent

@@ -1,5 +1,5 @@
 import {
-    Component, HostListener, HostBinding, ViewChild, ElementRef, AfterViewInit, OnInit, Renderer2, OnDestroy
+    Component, HostListener, HostBinding, ViewChild, ElementRef, AfterViewInit, Renderer2
 } from "@angular/core";
 import {Observable} from "rxjs/Observable";
 import 'rxjs/add/operator/do';
@@ -17,10 +17,7 @@ import {SpecificService} from "../../services/specific.service";
 
 import {MdDialog} from "@angular/material";
 import {Subscription} from "rxjs/Subscription";
-import {
-    inputs, spnstValSt_0, spnstValSt_1, spnstValSt_2, spnTglIn,
-    spnTglOut, STATE_STORE
-} from "../../store/store";
+import {Store, StateStore} from "../../store/store";
 
 @Component({
     moduleId: module.id,
@@ -64,7 +61,7 @@ import {
         SpecificService,
         DialogsService,
         DOMService,
-        D3Service,
+        D3Service
     ]
 })
 export class ModelingComponent<T> implements AfterViewInit{
@@ -86,9 +83,10 @@ export class ModelingComponent<T> implements AfterViewInit{
         public DS: DialogsService,
         public DOMS: DOMService,
         protected renderer: Renderer2,
-        protected dialog: MdDialog
+        protected dialog: MdDialog,
+        protected store: Store<T>
     ){
-        this.varSetter();
+        this.varSetter(this.store.manager());
     }
 
     @ViewChild("launch", {read: ElementRef}) launch: ElementRef;
@@ -116,32 +114,46 @@ export class ModelingComponent<T> implements AfterViewInit{
         this.subsToEvent = Observable.fromEvent(this.launch.nativeElement, 'click')
             .let((obs: Observable<{}>) =>
                 obs.do(()=>{
-                    spnstValSt_0();
-                    this.varSetter();
-        })
+                    this.varSetter(this.store.manager(
+                        {spn_tgl : 'out',
+                        spn_state_val : 0,
+                        inputs : this.store.state.get().inputs})
+                    );
+                })
                     .debounceTime(4)
                     .do(()=>{
-                        spnTglIn();
-                        this.varSetter();
+                        this.varSetter(this.store.manager(
+                            {spn_tgl : 'in',
+                            spn_state_val : ComputationService.rndmGen(15, 50),
+                            inputs : this.store.state.get().inputs})
+                        );
                     })
             )
             .debounceTime(300)
             .do(()=> {
-                spnstValSt_1();
-                inputs(this.SS.collectionDataInputs('input'));
-                this.varSetter();
+                this.varSetter(this.store.manager(
+                    {spn_tgl : 'in',
+                    spn_state_val : ComputationService.rndmGen(55, 70),
+                    inputs : SpecificService.applInputsData(this.store.state.get().inputs, this.SS.collectionDataInputs('input'))})
+                );
                 this.render(this.inputs, GV);
             })
             .debounceTime(300)
             .let((obs: Observable<any>) =>
                 obs.do(()=>{
-                    spnstValSt_2();
-                    this.varSetter();
+                    this.varSetter(this.store.manager(
+                        {spn_tgl : 'in',
+                        spn_state_val : ComputationService.rndmGen(75, 95),
+                        inputs : this.store.state.get().inputs})
+                    );
                 })
                     .debounceTime(100)
                     .do(()=>{
-                        spnTglOut();
-                        this.varSetter();
+                        this.varSetter(this.store.manager(
+                            {spn_tgl : 'out',
+                            spn_state_val : 100,
+                            inputs : this.store.state.get().inputs})
+                        );
                     })
             )
             .subscribe(
@@ -150,8 +162,8 @@ export class ModelingComponent<T> implements AfterViewInit{
             );
     }
     // Variables resetter. When app state changed it reassign application's variables.
-    varSetter(): void {
-        ({SVG_COMPS:this.SVG_COMPS, svg_attrs:this.svg_attrs, MW_TITLE:this.MW_TITLE, TOOLTIP_POS:this.TOOLTIP_POS, TOOLTIP_D:this.TOOLTIP_D, spn_tgl:this.spn_tgl, spn_state_val:this.spn_state_val, inputs:this.inputs} = STATE_STORE.get())
+    varSetter(v: StateStore) {
+        ({SVG_COMPS:this.SVG_COMPS, svg_attrs:this.svg_attrs, MW_TITLE:this.MW_TITLE, TOOLTIP_POS:this.TOOLTIP_POS, TOOLTIP_D:this.TOOLTIP_D, spn_tgl:this.spn_tgl, spn_state_val:this.spn_state_val, inputs:this.inputs} = v)
     }
     // Render array type of Inputs with D3
     render(inputs: Inputs, view: HTMLElement): void {

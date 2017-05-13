@@ -12,16 +12,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 require("hammerjs");
 var router_1 = require("@angular/router");
+var store_1 = require("./store/store");
 var AppComponent = (function () {
-    function AppComponent(router) {
+    function AppComponent(router, store) {
         this.router = router;
+        this.store = store;
     }
     AppComponent.prototype.onSwipe = function (e) {
         if (e.offsetDirection === 4) {
-            this.router.navigate(['/instruction']);
+            this.store.navigateTo((['instruction']));
         }
         else if (e.offsetDirection === 2) {
-            this.router.navigate(['/modeling']);
+            this.store.navigateTo((['modeling']));
         }
     };
     return AppComponent;
@@ -34,9 +36,9 @@ AppComponent = __decorate([
         styleUrls: ['app.component.css'],
         providers: []
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof router_1.Router !== "undefined" && router_1.Router) === "function" && _a || Object])
+    __metadata("design:paramtypes", [router_1.Router,
+        store_1.Store])
 ], AppComponent);
 exports.AppComponent = AppComponent;
-var _a;
 //Copyright (c) 2017 Alex Tranchenko. All rights reserved.
 //MIT License. 

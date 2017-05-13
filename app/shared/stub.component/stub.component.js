@@ -21,7 +21,7 @@ var StubComponent = (function () {
 }());
 __decorate([
     core_1.ViewChild("stubBody", { read: core_1.ElementRef }),
-    __metadata("design:type", typeof (_a = typeof core_1.ElementRef !== "undefined" && core_1.ElementRef) === "function" && _a || Object)
+    __metadata("design:type", core_1.ElementRef)
 ], StubComponent.prototype, "stubBody", void 0);
 __decorate([
     core_1.Input('stub-cmpnt-body'),
@@ -33,9 +33,8 @@ StubComponent = __decorate([
         selector: 'stub-cmpnt',
         template: " <div #stubBody></div>"
     }),
-    __metadata("design:paramtypes", [typeof (_b = typeof core_1.Renderer2 !== "undefined" && core_1.Renderer2) === "function" && _b || Object])
+    __metadata("design:paramtypes", [core_1.Renderer2])
 ], StubComponent);
 exports.StubComponent = StubComponent;
-var _a, _b;
 //Copyright (c) 2017 Alex Tranchenko. All rights reserved.
 //MIT License. 

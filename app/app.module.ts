@@ -12,6 +12,7 @@ import {SharedModule} from "./shared/shared.module";
 import {AppComponent} from "./AppComponent";
 import {ErrorHandlerService} from "./services/error.handler.service";
 import {HammerConfig} from "./app.configs/hammerjs.config";
+import {StoreModule} from "./store/store.module";
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import {HammerConfig} from "./app.configs/hammerjs.config";
         SharedModule,
         CoreModule,
         BrowserAnimationsModule,
+        StoreModule.provideStore()
     ],
     declarations: [
         AppComponent

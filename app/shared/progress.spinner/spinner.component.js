@@ -19,11 +19,11 @@ var SpinnerComponent = (function () {
 }());
 __decorate([
     core_1.Input(),
-    __metadata("design:type", typeof (_a = typeof material_1.MaterialModule !== "undefined" && material_1.MaterialModule) === "function" && _a || Object)
+    __metadata("design:type", material_1.MaterialModule)
 ], SpinnerComponent.prototype, "mode", void 0);
 __decorate([
     core_1.Input('spinner-start-val'),
-    __metadata("design:type", typeof (_b = typeof material_1.MaterialModule !== "undefined" && material_1.MaterialModule) === "function" && _b || Object)
+    __metadata("design:type", material_1.MaterialModule)
 ], SpinnerComponent.prototype, "value", void 0);
 SpinnerComponent = __decorate([
     core_1.Component({
@@ -35,6 +35,5 @@ SpinnerComponent = __decorate([
     })
 ], SpinnerComponent);
 exports.SpinnerComponent = SpinnerComponent;
-var _a, _b;
 //Copyright (c) 2017 Alex Tranchenko. All rights reserved.
 //MIT License. 

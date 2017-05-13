@@ -25,7 +25,7 @@ var specific_service_1 = require("../../services/specific.service");
 var material_1 = require("@angular/material");
 var store_1 = require("../../store/store");
 var ModelingComponent = (function () {
-    function ModelingComponent(D3, CS, ES, SS, DS, DOMS, renderer, dialog) {
+    function ModelingComponent(D3, CS, ES, SS, DS, DOMS, renderer, dialog, store) {
         this.D3 = D3;
         this.CS = CS;
         this.ES = ES;
@@ -34,9 +34,10 @@ var ModelingComponent = (function () {
         this.DOMS = DOMS;
         this.renderer = renderer;
         this.dialog = dialog;
+        this.store = store;
         this.routeAnimationRight = true;
         this.position = 'absolute';
-        this.varSetter();
+        this.varSetter(this.store.manager());
     }
     // Set event listener on the host.
     ModelingComponent.prototype.clickHandler = function (e) {
@@ -60,40 +61,43 @@ var ModelingComponent = (function () {
         this.subsToEvent = Observable_1.Observable.fromEvent(this.launch.nativeElement, 'click')
             .let(function (obs) {
             return obs.do(function () {
-                store_1.spnstValSt_0();
-                _this.varSetter();
+                _this.varSetter(_this.store.manager({ spn_tgl: 'out',
+                    spn_state_val: 0,
+                    inputs: _this.store.state.get().inputs }));
             })
                 .debounceTime(4)
                 .do(function () {
-                store_1.spnTglIn();
-                _this.varSetter();
+                _this.varSetter(_this.store.manager({ spn_tgl: 'in',
+                    spn_state_val: computation_service_1.ComputationService.rndmGen(15, 50),
+                    inputs: _this.store.state.get().inputs }));
             });
         })
             .debounceTime(300)
             .do(function () {
-            store_1.spnstValSt_1();
-            store_1.inputs(_this.SS.collectionDataInputs('input'));
-            _this.varSetter();
+            _this.varSetter(_this.store.manager({ spn_tgl: 'in',
+                spn_state_val: computation_service_1.ComputationService.rndmGen(55, 70),
+                inputs: specific_service_1.SpecificService.applInputsData(_this.store.state.get().inputs, _this.SS.collectionDataInputs('input')) }));
             _this.render(_this.inputs, GV);
         })
             .debounceTime(300)
             .let(function (obs) {
             return obs.do(function () {
-                store_1.spnstValSt_2();
-                _this.varSetter();
+                _this.varSetter(_this.store.manager({ spn_tgl: 'in',
+                    spn_state_val: computation_service_1.ComputationService.rndmGen(75, 95),
+                    inputs: _this.store.state.get().inputs }));
             })
                 .debounceTime(100)
                 .do(function () {
-                store_1.spnTglOut();
-                _this.varSetter();
+                _this.varSetter(_this.store.manager({ spn_tgl: 'out',
+                    spn_state_val: 100,
+                    inputs: _this.store.state.get().inputs }));
             });
         })
             .subscribe(function () { }, function (e) { _this.ES.handleError(e); });
     };
     // Variables resetter. When app state changed it reassign application's variables.
-    ModelingComponent.prototype.varSetter = function () {
-        (_a = store_1.STATE_STORE.get(), this.SVG_COMPS = _a.SVG_COMPS, this.svg_attrs = _a.svg_attrs, this.MW_TITLE = _a.MW_TITLE, this.TOOLTIP_POS = _a.TOOLTIP_POS, this.TOOLTIP_D = _a.TOOLTIP_D, this.spn_tgl = _a.spn_tgl, this.spn_state_val = _a.spn_state_val, this.inputs = _a.inputs);
-        var _a;
+    ModelingComponent.prototype.varSetter = function (v) {
+        (this.SVG_COMPS = v.SVG_COMPS, this.svg_attrs = v.svg_attrs, this.MW_TITLE = v.MW_TITLE, this.TOOLTIP_POS = v.TOOLTIP_POS, this.TOOLTIP_D = v.TOOLTIP_D, this.spn_tgl = v.spn_tgl, this.spn_state_val = v.spn_state_val, this.inputs = v.inputs);
     };
     // Render array type of Inputs with D3
     ModelingComponent.prototype.render = function (inputs, view) {
@@ -105,11 +109,11 @@ var ModelingComponent = (function () {
 }());
 __decorate([
     core_1.ViewChild("launch", { read: core_1.ElementRef }),
-    __metadata("design:type", typeof (_a = typeof core_1.ElementRef !== "undefined" && core_1.ElementRef) === "function" && _a || Object)
+    __metadata("design:type", core_1.ElementRef)
 ], ModelingComponent.prototype, "launch", void 0);
 __decorate([
     core_1.ViewChild("graphView", { read: core_1.ElementRef }),
-    __metadata("design:type", typeof (_b = typeof core_1.ElementRef !== "undefined" && core_1.ElementRef) === "function" && _b || Object)
+    __metadata("design:type", core_1.ElementRef)
 ], ModelingComponent.prototype, "graphView", void 0);
 __decorate([
     core_1.HostBinding('@routeAnimationRight'),
@@ -141,7 +145,7 @@ ModelingComponent = __decorate([
             specific_service_1.SpecificService,
             dialogs_service_1.DialogsService,
             dom_service_1.DOMService,
-            d3_service_1.D3Service,
+            d3_service_1.D3Service
         ]
     }),
     __metadata("design:paramtypes", [d3_service_1.D3Service,
@@ -149,9 +153,11 @@ ModelingComponent = __decorate([
         error_handler_service_1.ErrorHandlerService,
         specific_service_1.SpecificService,
         dialogs_service_1.DialogsService,
-        dom_service_1.DOMService, typeof (_c = typeof core_1.Renderer2 !== "undefined" && core_1.Renderer2) === "function" && _c || Object, typeof (_d = typeof material_1.MdDialog !== "undefined" && material_1.MdDialog) === "function" && _d || Object])
+        dom_service_1.DOMService,
+        core_1.Renderer2,
+        material_1.MdDialog,
+        store_1.Store])
 ], ModelingComponent);
 exports.ModelingComponent = ModelingComponent;
-var _a, _b, _c, _d;
 //Copyright (c) 2017 Alex Tranchenko. All rights reserved.
 //MIT License. 

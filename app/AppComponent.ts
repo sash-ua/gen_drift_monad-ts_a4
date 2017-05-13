@@ -1,6 +1,7 @@
 import {Component} from "@angular/core";
 import "hammerjs";
 import {Router} from "@angular/router";
+import {Store} from "./store/store";
 
 @Component({
     moduleId: module.id,
@@ -29,15 +30,16 @@ import {Router} from "@angular/router";
     providers: []
 })
 
-export class AppComponent {
+export class AppComponent<T> {
     constructor(
-        private router: Router
+        private router: Router,
+        private store: Store<T>
     ){}
     onSwipe(e: HammerInput){
         if(e.offsetDirection === 4){
-            this.router.navigate(['/instruction']);
+            this.store.navigateTo((['instruction']));
         } else if (e.offsetDirection === 2){
-            this.router.navigate(['/modeling']);
+            this.store.navigateTo((['modeling']));
         }
     }
 }
