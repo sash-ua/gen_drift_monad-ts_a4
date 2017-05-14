@@ -29,7 +29,8 @@
             'd3': 'npm:d3/build',
             'ts': 'npm:typescript/src/typescript.js',
             'hammerjs': 'npm:hammerjs/hammer.js',
-            'monad-ts': 'npm:monad-ts/lib/monad_ts.umd.js'
+            'monad-ts': 'npm:monad-ts/lib/monad_ts.umd.js',
+            'state-ts': 'npm:monad-ts/lib/state_ts.umd.js'
         },
         // packages tells the System loader how to load when no filename and/or no extension
         packages: {

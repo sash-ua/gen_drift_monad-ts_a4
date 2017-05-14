@@ -14,8 +14,7 @@ export default {
         commonjs({
             include: [
                 'node_modules/rxjs/**',
-                'node_modules/ngrx-store-freeze/**',
-                'node_modules/deep-freeze-strict/**'
+                'node_modules/monad-ts/**/**'
             ]
         }),
         uglify()

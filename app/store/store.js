@@ -28,10 +28,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var router_1 = require("@angular/router");
-var monad_ts_1 = require("monad-ts");
 var core_1 = require("@angular/core");
 var specific_service_1 = require("../services/specific.service");
 var store_service_1 = require("./store.service");
+var monad_ts_1 = require("monad-ts");
 var MODELING_CONSTS = {
     TOOLTIP_D: 100,
     TOOLTIP_POS: 'above',

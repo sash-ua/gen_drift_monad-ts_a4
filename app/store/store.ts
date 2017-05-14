@@ -1,10 +1,10 @@
 
 import {Router} from "@angular/router";
-import {State} from "monad-ts";
 import {Injectable} from "@angular/core";
 import {ArrAttrSetter, Inputs} from "../types/types";
 import {SpecificService} from "../services/specific.service";
 import {StoreService} from "./store.service";
+import {State} from "monad-ts";
 
 export interface MConsts{
     TOOLTIP_D: number;

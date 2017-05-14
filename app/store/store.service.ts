@@ -1,6 +1,6 @@
-import {State} from "monad-ts";
 import {NavigationExtras, Router} from "@angular/router";
 import {StateStore} from "./store";
+import {State} from "monad-ts";
 
 export class StoreService<T>{
     state: State<StateStore>;
