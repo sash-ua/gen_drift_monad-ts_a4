@@ -13,8 +13,7 @@ export default {
         nodeResolve({jsnext: true, module: true, main: true}),
         commonjs({
             include: [
-                'node_modules/rxjs/**',
-                'node_modules/monad-ts/**/**'
+                'node_modules/rxjs/**'
             ]
         }),
         uglify()

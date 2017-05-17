@@ -53,7 +53,7 @@ export class Store<T> extends StoreService<T>{
         router: Router
     ){
         super(router);
-        this.state = new State(Object.assign({}, INIT_STATE, this._URL));
+        this.state = new State({...INIT_STATE, ...this._URL});
     }
 }
 

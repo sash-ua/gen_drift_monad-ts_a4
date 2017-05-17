@@ -18,6 +18,7 @@ import {SpecificService} from "../../services/specific.service";
 import {MdDialog} from "@angular/material";
 import {Subscription} from "rxjs/Subscription";
 import {Store, StateStore} from "../../store/store";
+import {AsyncFlow, wait} from "monad-ts";
 
 @Component({
     moduleId: module.id,
@@ -52,7 +53,7 @@ import {Store, StateStore} from "../../store/store";
             'openHide',
             ['in', 'out'],
             [{display: 'block', opacity: 1, transform: 'translateZ(0)'},{display: 'none', opacity: 0, transform: 'translateZ(0)'}],
-            ['300ms ease-in', '200ms ease-out']
+            ['0ms ease-in', '0ms ease-out']
         )
     ],
     providers: [
@@ -65,8 +66,9 @@ import {Store, StateStore} from "../../store/store";
     ]
 })
 export class ModelingComponent<T> implements AfterViewInit{
-    MW_TITLE: string ;
+    GV: HTMLElement;
     subsToEvent: Subscription;
+    MW_TITLE: string ;
     svg_attrs: ArrAttrSetter;
     SVG_COMPS: Array<string>;
     TOOLTIP_D: number;
@@ -107,55 +109,13 @@ export class ModelingComponent<T> implements AfterViewInit{
         }
     };
     ngAfterViewInit(){
-        const GV: HTMLElement = this.graphView.nativeElement;
+        this.GV = this.graphView.nativeElement;
         // Generate graph while rendering page.
-        this.render(this.inputs, GV);
+        this.render(this.inputs, this.GV);
         // Button 'Lunch' handler. Produce D3 Graph after clicking and manage spinner.
         this.subsToEvent = Observable.fromEvent(this.launch.nativeElement, 'click')
-            .let((obs: Observable<{}>) =>
-                obs.do(()=>{
-                    this.varSetter(this.store.manager(
-                        {spn_tgl : 'out',
-                        spn_state_val : 0,
-                        inputs : this.store.state.get().inputs})
-                    );
-                })
-                    .debounceTime(4)
-                    .do(()=>{
-                        this.varSetter(this.store.manager(
-                            {spn_tgl : 'in',
-                            spn_state_val : ComputationService.rndmGen(15, 50),
-                            inputs : this.store.state.get().inputs})
-                        );
-                    })
-            )
-            .debounceTime(300)
-            .do(()=> {
-                this.varSetter(this.store.manager(
-                    {spn_tgl : 'in',
-                    spn_state_val : ComputationService.rndmGen(55, 70),
-                    inputs : SpecificService.applInputsData(this.store.state.get().inputs, this.SS.collectionDataInputs('input'))})
-                );
-                this.render(this.inputs, GV);
-            })
-            .debounceTime(300)
-            .let((obs: Observable<any>) =>
-                obs.do(()=>{
-                    this.varSetter(this.store.manager(
-                        {spn_tgl : 'in',
-                        spn_state_val : ComputationService.rndmGen(75, 95),
-                        inputs : this.store.state.get().inputs})
-                    );
-                })
-                    .debounceTime(100)
-                    .do(()=>{
-                        this.varSetter(this.store.manager(
-                            {spn_tgl : 'out',
-                            spn_state_val : 100,
-                            inputs : this.store.state.get().inputs})
-                        );
-                    })
-            )
+            .debounceTime(220)
+            .do(()=>{this.onLaunch()})
             .subscribe(
                 () => {},
                 (e: Error) => {this.ES.handleError(e);}
@@ -165,6 +125,57 @@ export class ModelingComponent<T> implements AfterViewInit{
     varSetter(v: StateStore) {
         ({SVG_COMPS:this.SVG_COMPS, svg_attrs:this.svg_attrs, MW_TITLE:this.MW_TITLE, TOOLTIP_POS:this.TOOLTIP_POS, TOOLTIP_D:this.TOOLTIP_D, spn_tgl:this.spn_tgl, spn_state_val:this.spn_state_val, inputs:this.inputs} = v)
     }
+    // Launch button event handler
+    onLaunch() {
+        const F = new AsyncFlow(0)
+            .bind(()=>{
+                this.varSetter(this.store.manager(
+                    {
+                        spn_tgl : 'in',
+                        spn_state_val : ComputationService.rndmGen(15, 50),
+                    })
+                );
+            })
+            .then(v=> wait(v, 100))
+            .then(()=> {
+                this.varSetter(
+                    this.store.manager(
+                        {
+                            spn_tgl : 'in',
+                            spn_state_val : ComputationService.rndmGen(55, 70),
+                            inputs : SpecificService.applInputsData(this.store.state.get().inputs, this.SS.collectionDataInputs('input'))
+                        })
+                    );
+                this.render(this.inputs, this.GV);
+            })
+            .then(v=> wait(v, 170))
+            .then(()=>{
+                this.varSetter(this.store.manager(
+                    {
+                        spn_tgl : 'in',
+                        spn_state_val : ComputationService.rndmGen(75, 95),
+                    })
+                );
+            })
+            .then(v=> wait(v, 100))
+            .then(()=>{
+                this.varSetter(this.store.manager(
+                    {
+                        spn_tgl : 'in',
+                        spn_state_val : 100,
+                    })
+                );
+            })
+            .then(v=> wait(v, 250))
+            .then(() => {
+                this.varSetter(this.store.manager(
+                    {
+                        spn_tgl: 'out',
+                        spn_state_val: 0,
+                    }))
+            })
+    }
+
     // Render array type of Inputs with D3
     render(inputs: Inputs, view: HTMLElement): void {
         const NG = this.CS.arrG(
