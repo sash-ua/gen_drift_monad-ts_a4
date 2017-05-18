@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -25,19 +26,20 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Router } from "@angular/router";
-import { Injectable } from "@angular/core";
-import { SpecificService } from "../services/specific.service";
-import { StoreService } from "./store.service";
-import { State } from "monad-ts";
+Object.defineProperty(exports, "__esModule", { value: true });
+var router_1 = require("@angular/router");
+var core_1 = require("@angular/core");
+var specific_service_1 = require("../services/specific.service");
+var store_service_1 = require("./store.service");
+var monad_ts_1 = require("monad-ts");
 var MODELING_CONSTS = {
     TOOLTIP_D: 100,
     TOOLTIP_POS: 'above',
     MW_TITLE: "Graph",
     SVG_COMPS: ['svg', 'g', 'tspan', 'text', 'path'],
-    svg_attrs: [['preserveAspectRatio', 'xMidYMid meet'], ['viewBox', '0 0 305 305'], ['height', '100%'], ['width', SpecificService.dimension(0.35, 0.4)]]
+    svg_attrs: [['preserveAspectRatio', 'xMidYMid meet'], ['viewBox', '0 0 305 305'], ['height', '100%'], ['width', specific_service_1.SpecificService.dimension(0.35, 0.4)]]
 };
-export var inputsInit = [
+exports.inputsInit = [
     { preDefData: 1000, hint: 'Population', dvdrColor: 'warn', interval: [2], toolTip: 'Integer number from 2' },
     { preDefData: 100, hint: 'Generations', dvdrColor: 'warn', interval: [1], toolTip: 'Integer number from 1' },
     { preDefData: 2, hint: 'Simulations', dvdrColor: 'warn', interval: [1], toolTip: 'Integer number from 1' },
@@ -46,20 +48,20 @@ export var inputsInit = [
     { preDefData: 0.15, hint: 'Natural decline', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.77' },
     { preDefData: 0.2, hint: 'Natural growth', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.09' }
 ];
-export var INIT_STATE = __assign({ spn_tgl: 'out', spn_state_val: 0, inputs: inputsInit }, MODELING_CONSTS);
+exports.INIT_STATE = __assign({ spn_tgl: 'out', spn_state_val: 0, inputs: exports.inputsInit }, MODELING_CONSTS);
 var Store = (function (_super) {
     __extends(Store, _super);
     function Store(router) {
         var _this = _super.call(this, router) || this;
         _this._URL = { currentUrl: [_this.router.url] };
-        _this.state = new State(__assign({}, INIT_STATE, _this._URL));
+        _this.state = new monad_ts_1.State(__assign({}, exports.INIT_STATE, _this._URL));
         return _this;
     }
     return Store;
-}(StoreService));
+}(store_service_1.StoreService));
 Store = __decorate([
-    Injectable(),
-    __metadata("design:paramtypes", [Router])
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [router_1.Router])
 ], Store);
-export { Store };
+exports.Store = Store;
 //Copyright (c) 2017 Alex Tranchenko. All rights reserved. 

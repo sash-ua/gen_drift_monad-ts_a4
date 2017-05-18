@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var StoreService = (function () {
     function StoreService(router) {
         this.router = router;
@@ -30,5 +32,5 @@ var StoreService = (function () {
     };
     return StoreService;
 }());
-export { StoreService };
+exports.StoreService = StoreService;
 //Copyright (c) 2017 Alex Tranchenko. All rights reserved. 
