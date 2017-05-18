@@ -9,10 +9,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { Component, HostListener, HostBinding, ViewChild, ElementRef, Renderer2 } from "@angular/core";
 import { Observable } from "rxjs/Observable";
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/let';
-import 'rxjs/add/observable/from';
 import { D3Service } from "../../services/d3.service";
 import { ComputationService } from "../../services/computation.service";
 import { ErrorHandlerService } from "../../services/error.handler.service";
@@ -22,7 +18,7 @@ import { AnimationsServices } from "../../services/animations.service";
 import { SpecificService } from "../../services/specific.service";
 import { MdDialog } from "@angular/material";
 import { Store } from "../../store/store";
-import { AsyncFlow, wait } from "monad-ts";
+import { AsyncFlow, wait, debounceTime } from "monad-ts";
 var ModelingComponent = (function () {
     function ModelingComponent(D3, CS, ES, SS, DS, DOMS, renderer, dialog, store) {
         this.D3 = D3;
@@ -56,52 +52,54 @@ var ModelingComponent = (function () {
         this.GV = this.graphView.nativeElement;
         // Generate graph while rendering page.
         this.render(this.inputs, this.GV);
-        // Button 'Lunch' handler. Produce D3 Graph after clicking and manage spinner.
+        // Function debounceTime(). Define invoked func. and timeout.
+        var dT = debounceTime(this.onLaunch, 500);
+        // Button 'Launch' handler. Produce D3 Graph after clicking and manage spinner.
         this.subsToEvent = Observable.fromEvent(this.launch.nativeElement, 'click')
-            .debounceTime(220)
-            .do(function () { _this.onLaunch(); })
-            .subscribe(function () { }, function (e) { _this.ES.handleError(e); });
+            .subscribe(function () {
+            // To pass `this` to onLaunch().
+            dT(_this);
+        }, function (e) { _this.ES.handleError(e); });
     };
     // Variables resetter. When app state changed it reassign application's variables.
     ModelingComponent.prototype.varSetter = function (v) {
         (this.SVG_COMPS = v.SVG_COMPS, this.svg_attrs = v.svg_attrs, this.MW_TITLE = v.MW_TITLE, this.TOOLTIP_POS = v.TOOLTIP_POS, this.TOOLTIP_D = v.TOOLTIP_D, this.spn_tgl = v.spn_tgl, this.spn_state_val = v.spn_state_val, this.inputs = v.inputs);
     };
-    // Launch button event handler
-    ModelingComponent.prototype.onLaunch = function () {
-        var _this = this;
+    // Launch button event handler. To pass `this` through debounceTime(), takes it as argument.
+    ModelingComponent.prototype.onLaunch = function (self) {
         var F = new AsyncFlow(0)
             .bind(function () {
-            _this.varSetter(_this.store.manager({
+            self.varSetter(self.store.manager({
                 spn_tgl: 'in',
                 spn_state_val: ComputationService.rndmGen(15, 50),
             }));
         })
-            .then(function (v) { return wait(v, 100); })
+            .then(function (v) { return wait(v, 120); })
             .then(function () {
-            _this.varSetter(_this.store.manager({
+            self.varSetter(self.store.manager({
                 spn_tgl: 'in',
                 spn_state_val: ComputationService.rndmGen(55, 70),
-                inputs: SpecificService.applInputsData(_this.store.state.get().inputs, _this.SS.collectionDataInputs('input'))
+                inputs: SpecificService.applInputsData(self.store.state.get().inputs, self.SS.collectionDataInputs('input'))
             }));
-            _this.render(_this.inputs, _this.GV);
+            self.render(self.inputs, self.GV);
         })
-            .then(function (v) { return wait(v, 170); })
+            .then(function (v) { return wait(v, 100); })
             .then(function () {
-            _this.varSetter(_this.store.manager({
+            self.varSetter(self.store.manager({
                 spn_tgl: 'in',
                 spn_state_val: ComputationService.rndmGen(75, 95),
             }));
         })
             .then(function (v) { return wait(v, 100); })
             .then(function () {
-            _this.varSetter(_this.store.manager({
+            self.varSetter(self.store.manager({
                 spn_tgl: 'in',
                 spn_state_val: 100,
             }));
         })
             .then(function (v) { return wait(v, 250); })
             .then(function () {
-            _this.varSetter(_this.store.manager({
+            self.varSetter(self.store.manager({
                 spn_tgl: 'out',
                 spn_state_val: 0,
             }));

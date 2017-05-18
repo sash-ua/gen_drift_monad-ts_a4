@@ -2,10 +2,6 @@ import {
     Component, HostListener, HostBinding, ViewChild, ElementRef, AfterViewInit, Renderer2
 } from "@angular/core";
 import {Observable} from "rxjs/Observable";
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/let';
-import 'rxjs/add/observable/from';
 import {D3Service} from "../../services/d3.service";
 import {ComputationService} from "../../services/computation.service";
 import {ErrorHandlerService} from "../../services/error.handler.service";
@@ -18,7 +14,7 @@ import {SpecificService} from "../../services/specific.service";
 import {MdDialog} from "@angular/material";
 import {Subscription} from "rxjs/Subscription";
 import {Store, StateStore} from "../../store/store";
-import {AsyncFlow, wait} from "monad-ts";
+import {AsyncFlow, wait, debounceTime} from "monad-ts";
 
 @Component({
     moduleId: module.id,
@@ -112,45 +108,49 @@ export class ModelingComponent<T> implements AfterViewInit{
         this.GV = this.graphView.nativeElement;
         // Generate graph while rendering page.
         this.render(this.inputs, this.GV);
-        // Button 'Lunch' handler. Produce D3 Graph after clicking and manage spinner.
+        // Function debounceTime(). Define invoked func. and timeout.
+        const dT = debounceTime(this.onLaunch, 500);
+        // Button 'Launch' handler. Produce D3 Graph after clicking and manage spinner.
         this.subsToEvent = Observable.fromEvent(this.launch.nativeElement, 'click')
-            .debounceTime(220)
-            .do(()=>{this.onLaunch()})
             .subscribe(
-                () => {},
+                () => {
+                    // To pass `this` to onLaunch().
+                    dT(this);
+                },
                 (e: Error) => {this.ES.handleError(e);}
             );
     }
+
     // Variables resetter. When app state changed it reassign application's variables.
     varSetter(v: StateStore) {
         ({SVG_COMPS:this.SVG_COMPS, svg_attrs:this.svg_attrs, MW_TITLE:this.MW_TITLE, TOOLTIP_POS:this.TOOLTIP_POS, TOOLTIP_D:this.TOOLTIP_D, spn_tgl:this.spn_tgl, spn_state_val:this.spn_state_val, inputs:this.inputs} = v)
     }
-    // Launch button event handler
-    onLaunch() {
+    // Launch button event handler. To pass `this` through debounceTime(), takes it as argument.
+    onLaunch(self: ModelingComponent<T>) {
         const F = new AsyncFlow(0)
             .bind(()=>{
-                this.varSetter(this.store.manager(
+                self.varSetter(self.store.manager(
                     {
                         spn_tgl : 'in',
                         spn_state_val : ComputationService.rndmGen(15, 50),
                     })
                 );
             })
-            .then(v=> wait(v, 100))
+            .then(v=> wait(v, 120))
             .then(()=> {
-                this.varSetter(
-                    this.store.manager(
+                self.varSetter(
+                    self.store.manager(
                         {
                             spn_tgl : 'in',
                             spn_state_val : ComputationService.rndmGen(55, 70),
-                            inputs : SpecificService.applInputsData(this.store.state.get().inputs, this.SS.collectionDataInputs('input'))
+                            inputs : SpecificService.applInputsData(self.store.state.get().inputs, self.SS.collectionDataInputs('input'))
                         })
                     );
-                this.render(this.inputs, this.GV);
+                self.render(self.inputs, self.GV);
             })
-            .then(v=> wait(v, 170))
+            .then(v=> wait(v, 100))
             .then(()=>{
-                this.varSetter(this.store.manager(
+                self.varSetter(self.store.manager(
                     {
                         spn_tgl : 'in',
                         spn_state_val : ComputationService.rndmGen(75, 95),
@@ -159,7 +159,7 @@ export class ModelingComponent<T> implements AfterViewInit{
             })
             .then(v=> wait(v, 100))
             .then(()=>{
-                this.varSetter(this.store.manager(
+                self.varSetter(self.store.manager(
                     {
                         spn_tgl : 'in',
                         spn_state_val : 100,
@@ -168,7 +168,7 @@ export class ModelingComponent<T> implements AfterViewInit{
             })
             .then(v=> wait(v, 250))
             .then(() => {
-                this.varSetter(this.store.manager(
+                self.varSetter(self.store.manager(
                     {
                         spn_tgl: 'out',
                         spn_state_val: 0,
