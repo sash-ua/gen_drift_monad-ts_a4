@@ -13,8 +13,9 @@ import {SpecificService} from "../../services/specific.service";
 
 import {MdDialog} from "@angular/material";
 import {Subscription} from "rxjs/Subscription";
-import {Store, StateStore} from "../../store/store";
+import {Store} from "../../store/store";
 import {AsyncFlow, wait, debounceTime} from "monad-ts";
+import {StateStore} from "../../store/store.init";
 
 @Component({
     moduleId: module.id,
@@ -82,9 +83,9 @@ export class ModelingComponent<T> implements AfterViewInit{
         public DOMS: DOMService,
         protected renderer: Renderer2,
         protected dialog: MdDialog,
-        protected store: Store<T>
+        protected store: Store<StateStore>
     ){
-        this.varSetter(this.store.manager());
+        this.varSetter(this.store.manager({svg_attrs: [['preserveAspectRatio', 'xMidYMid meet'], ['viewBox', '0 0 305 305'], ['height', '100%'], ['width', SpecificService.dimension(0.35, 0.4)]]}));
     }
 
     @ViewChild("launch", {read: ElementRef}) launch: ElementRef;
@@ -109,12 +110,12 @@ export class ModelingComponent<T> implements AfterViewInit{
         // Generate graph while rendering page.
         this.render(this.inputs, this.GV);
         // Function debounceTime(). Define invoked func. and timeout.
-        const dT = debounceTime(this.onLaunch, 500);
+        const dT = debounceTime(this.onLaunch, 400);
         // Button 'Launch' handler. Produce D3 Graph after clicking and manage spinner.
         this.subsToEvent = Observable.fromEvent(this.launch.nativeElement, 'click')
             .subscribe(
                 () => {
-                    // To pass `this` to onLaunch().
+                    // Passing `this` to onLaunch().
                     dT(this);
                 },
                 (e: Error) => {this.ES.handleError(e);}
@@ -122,10 +123,11 @@ export class ModelingComponent<T> implements AfterViewInit{
     }
 
     // Variables resetter. When app state changed it reassign application's variables.
-    varSetter(v: StateStore) {
+    varSetter(v: Partial<StateStore>) {
         ({SVG_COMPS:this.SVG_COMPS, svg_attrs:this.svg_attrs, MW_TITLE:this.MW_TITLE, TOOLTIP_POS:this.TOOLTIP_POS, TOOLTIP_D:this.TOOLTIP_D, spn_tgl:this.spn_tgl, spn_state_val:this.spn_state_val, inputs:this.inputs} = v)
     }
-    // Launch button event handler. To pass `this` through debounceTime(), takes it as argument.
+
+    // Launch button event handler. `this` passed through debounceTime(),  it takes it as argument.
     onLaunch(self: ModelingComponent<T>) {
         const F = new AsyncFlow(0)
             .bind(()=>{

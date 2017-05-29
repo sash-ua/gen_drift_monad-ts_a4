@@ -12,6 +12,7 @@ var platform_browser_1 = require("@angular/platform-browser");
 var forms_1 = require("@angular/forms");
 var animations_1 = require("@angular/platform-browser/animations");
 // UI
+var my_material_module_1 = require("./shared/my.material.module/my.material.module");
 // Modules
 var core_module_1 = require("./core/core.module");
 var shared_module_1 = require("./shared/shared.module");
@@ -20,6 +21,7 @@ var AppComponent_1 = require("./AppComponent");
 var error_handler_service_1 = require("./services/error.handler.service");
 var hammerjs_config_1 = require("./app.configs/hammerjs.config");
 var store_module_1 = require("./store/store.module");
+var store_init_1 = require("./store/store.init");
 var AppModule = (function () {
     function AppModule() {
     }
@@ -33,7 +35,8 @@ AppModule = __decorate([
             shared_module_1.SharedModule,
             core_module_1.CoreModule,
             animations_1.BrowserAnimationsModule,
-            store_module_1.StoreModule.provideStore()
+            my_material_module_1.MyMaterialModule,
+            store_module_1.StoreModule.provideStore(store_init_1.INIT_STATE),
         ],
         declarations: [
             AppComponent_1.AppComponent

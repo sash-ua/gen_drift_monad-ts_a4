@@ -8,13 +8,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var store_1 = require("./store");
+var common_1 = require("@angular/common");
+var router_1 = require("@angular/router");
+function _storeFactory(router, location, init) {
+    return new store_1.Store(router, location, init);
+}
+exports._storeFactory = _storeFactory;
+exports._INITIAL_STATE = new core_1.InjectionToken('Token');
+function provideStore(initState) {
+    return [
+        { provide: store_1.Store, useFactory: _storeFactory, deps: [router_1.Router, common_1.Location, exports._INITIAL_STATE] },
+        { provide: exports._INITIAL_STATE, useValue: initState },
+    ];
+}
+exports.provideStore = provideStore;
 var StoreModule = StoreModule_1 = (function () {
     function StoreModule() {
     }
-    StoreModule.provideStore = function () {
+    StoreModule.provideStore = function (INIT_STATE) {
         return {
             ngModule: StoreModule_1,
-            providers: [store_1.Store]
+            providers: provideStore(INIT_STATE)
         };
     };
     return StoreModule;

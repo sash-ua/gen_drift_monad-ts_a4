@@ -29,39 +29,33 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var router_1 = require("@angular/router");
 var core_1 = require("@angular/core");
-var specific_service_1 = require("../services/specific.service");
+var common_1 = require("@angular/common");
 var store_service_1 = require("./store.service");
 var monad_ts_1 = require("monad-ts");
-var MODELING_CONSTS = {
-    TOOLTIP_D: 100,
-    TOOLTIP_POS: 'above',
-    MW_TITLE: "Graph",
-    SVG_COMPS: ['svg', 'g', 'tspan', 'text', 'path'],
-    svg_attrs: [['preserveAspectRatio', 'xMidYMid meet'], ['viewBox', '0 0 305 305'], ['height', '100%'], ['width', specific_service_1.SpecificService.dimension(0.35, 0.4)]]
-};
-exports.inputsInit = [
-    { preDefData: 1000, hint: 'Population', dvdrColor: 'warn', interval: [2], toolTip: 'Integer number from 2' },
-    { preDefData: 100, hint: 'Generations', dvdrColor: 'warn', interval: [1], toolTip: 'Integer number from 1' },
-    { preDefData: 2, hint: 'Simulations', dvdrColor: 'warn', interval: [1], toolTip: 'Integer number from 1' },
-    { preDefData: 0.5, hint: 'Init. Alleles Balance', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.164' },
-    { preDefData: 0.1, hint: 'Bottle Neck Probability', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.2' },
-    { preDefData: 0.15, hint: 'Natural decline', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.77' },
-    { preDefData: 0.2, hint: 'Natural growth', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.09' }
-];
-exports.INIT_STATE = __assign({ spn_tgl: 'out', spn_state_val: 0, inputs: exports.inputsInit }, MODELING_CONSTS);
 var Store = (function (_super) {
     __extends(Store, _super);
-    function Store(router) {
-        var _this = _super.call(this, router) || this;
-        _this._URL = { currentUrl: [_this.router.url] };
-        _this.state = new monad_ts_1.State(__assign({}, exports.INIT_STATE, _this._URL));
+    function Store(router, location, INIT_STATE) {
+        var _this = _super.call(this, router, location) || this;
+        _this.INIT_STATE = INIT_STATE;
+        _this._URL = { currentUrl: [''] };
+        _this.routerUrlSubscription$ = _this.router.events.subscribe(function (ev) {
+            if (ev instanceof router_1.NavigationEnd) {
+                _this.state.put(function (v) {
+                    v.currentUrl = [ev.url];
+                    return v;
+                });
+            }
+        });
+        // Initialize store's state. Required - _URL, optional - INIT_STATE prop.
+        _this.state = new monad_ts_1.State(__assign({}, _this._URL, INIT_STATE));
         return _this;
     }
     return Store;
 }(store_service_1.StoreService));
 Store = __decorate([
     core_1.Injectable(),
-    __metadata("design:paramtypes", [router_1.Router])
+    __metadata("design:paramtypes", [router_1.Router,
+        common_1.Location, Object])
 ], Store);
 exports.Store = Store;
 //Copyright (c) 2017 Alex Tranchenko. All rights reserved. 

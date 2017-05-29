@@ -40,6 +40,6 @@ import { AnimationsServices} from "../../services/animations.service";
 export class InstructionComponent{
     @HostBinding('@routeAnimationLeft') routeAnimationLeft: AnimationsServices = true;
     @HostBinding('style.position')  position = 'absolute';
+
 }
 //Copyright (c) 2017 Alex Tranchenko. All rights reserved.
-//MIT License.

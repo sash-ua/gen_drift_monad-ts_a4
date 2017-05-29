@@ -5,6 +5,7 @@ import {FormsModule} from "@angular/forms";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 // UI
+import {MyMaterialModule} from "./shared/my.material.module/my.material.module";
 // Modules
 import {CoreModule} from "./core/core.module";
 import {SharedModule} from "./shared/shared.module";
@@ -14,6 +15,8 @@ import {ErrorHandlerService} from "./services/error.handler.service";
 import {HammerConfig} from "./app.configs/hammerjs.config";
 import {StoreModule} from "./store/store.module";
 
+import {INIT_STATE} from "./store/store.init";
+
 
 @NgModule({
     imports: [
@@ -22,7 +25,8 @@ import {StoreModule} from "./store/store.module";
         SharedModule,
         CoreModule,
         BrowserAnimationsModule,
-        StoreModule.provideStore()
+        MyMaterialModule,
+        StoreModule.provideStore(INIT_STATE),
     ],
     declarations: [
         AppComponent

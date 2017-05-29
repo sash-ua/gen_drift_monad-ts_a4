@@ -11,11 +11,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 require("hammerjs");
-var router_1 = require("@angular/router");
 var store_1 = require("./store/store");
 var AppComponent = (function () {
-    function AppComponent(router, store) {
-        this.router = router;
+    function AppComponent(store) {
         this.store = store;
     }
     AppComponent.prototype.onSwipe = function (e) {
@@ -32,12 +30,11 @@ AppComponent = __decorate([
     core_1.Component({
         moduleId: module.id,
         selector: 'app-root',
-        template: "<div (swipe)=\"onSwipe($event)\" class=\"wrapper\">\n        <header>\n            <h1 class=\"header__title introduction__txt\">Genetic drift</h1>\n        </header>\n        <main>\n            <nav>\n                <ul class=\"nav\">\n                    <li class=\"nav__el\">\n                        <a routerLink=\"/instruction\" routerLinkActive=\"active\" [class.activeR]=\"active\" class=\"nav_link link\" #intro>Introduction</a>\n                    </li>\n                    <li class=\"nav__el\">\n                        <a routerLink=\"/modeling\" routerLinkActive=\"active\" [class.activeR]=\"active\" class=\"nav_link link\" #mode>Modeling</a>\n                    </li>\n                </ul>\n            </nav>\n            <div class=\"line-stub\"></div>\n            <router-outlet></router-outlet>\n        </main>\n    </div>",
+        template: "<div (swipe)=\"onSwipe($event)\" class=\"wrapper\">\n        <header>\n            <h1 class=\"header__title introduction__txt\">Genetic drift</h1>\n        </header>\n        <main>\n            <nav>\n                <ul class=\"nav\">\n                    <li class=\"nav__el\">\n                        <a routerLink=\"/instruction\" routerLinkActive=\"active\" [class.activeR]=\"active\" class=\"nav_link link\">Introduction</a>\n                    </li>\n                    <li class=\"nav__el\">\n                        <a routerLink=\"/modeling\" routerLinkActive=\"active\" [class.activeR]=\"active\" class=\"nav_link link\">Modeling</a>\n                    </li>\n                </ul>\n            </nav>\n            <div class=\"line-stub\"></div>\n            <router-outlet></router-outlet>\n        </main>\n    </div>",
         styleUrls: ['app.component.css'],
         providers: []
     }),
-    __metadata("design:paramtypes", [router_1.Router,
-        store_1.Store])
+    __metadata("design:paramtypes", [store_1.Store])
 ], AppComponent);
 exports.AppComponent = AppComponent;
 //Copyright (c) 2017 Alex Tranchenko. All rights reserved.

@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import {
     MdProgressSpinner, MdInputContainer, MdInputModule, MdProgressSpinnerModule,
     MdInputDirective, MdButtonModule, MdButton, MdDialogModule, MdTooltipModule, MdTooltip,
-    MdRaisedButtonCssMatStyler, MdButtonCssMatStyler, MdProgressSpinnerCssMatStyler
+    MdRaisedButtonCssMatStyler, MdButtonCssMatStyler, MdProgressSpinnerCssMatStyler, MdDialogRef
 } from "@angular/material";
 
 

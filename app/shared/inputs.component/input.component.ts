@@ -1,6 +1,5 @@
 import {Component, Input, ChangeDetectionStrategy} from "@angular/core";
 import {InputValidatorService} from "../../services/inut.validator.service";
-import {MdTooltip} from "@angular/material";
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,

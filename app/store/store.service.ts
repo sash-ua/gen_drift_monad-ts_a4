@@ -1,31 +1,44 @@
 import {NavigationExtras, Router} from "@angular/router";
-import {StateStore} from "./store";
+import { Location } from '@angular/common';
 import {State} from "monad-ts";
+import {S} from "./interfaces/s";
 
-export class StoreService<T>{
-    state: State<StateStore>;
+export class StoreService<T> {
+    state: State<S>;
     constructor(
-        public router: Router
+        protected router: Router,
+        protected location: Location
     ){}
+    forward(){
+        this.location.forward();
+    }
+    back(){
+        this.location.back();
+    }
     navigateTo(commands: any[], extras?: NavigationExtras){
         this._updateState({currentUrl: commands});
         this.router.navigate(this.state.get().currentUrl, extras).then((r)=>{
-            if((!r && this.router.url.slice(1) !== commands.join('/')) ) console.log(new Error('StoreService.navigateTo()- navigation error'));
+            if((!r && this.router.url.slice(1) !== commands.join('/')) ) console.error(new Error('StoreService.navigateTo()- navigation error'));
         });
     }
-    manager(v?: typeof StateStore ){
-        v ? this._updateState(v) : null;
+    manager<U>(v?: U ): S {
+        if(v) {
+            this._updateState(v)
+        }
         return this.state.get();
     }
-    _updateState(v: typeof StateStore): void {
-        for(let k in v){
-            if(v.hasOwnProperty(k)){
-                this.state.put(c => {
-                    c[k] = v[k];
-                    return c
-                });
+    _updateState<U>(v: U): void {
+        this.state.put(c => this._changeObject(v)(c));
+    }
+    _changeObject<U>(v: U): Function{
+        return (c: U): U=>{
+            for(let k in v){
+                if(v.hasOwnProperty(k)){
+                    c[k]= v[k];
+                }
             }
-        }
+            return c;
+        };
     }
 }
 

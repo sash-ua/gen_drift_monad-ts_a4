@@ -30,7 +30,5 @@ export class ModalWindowComponent{
     constructor(public dialogRef: MdDialogRef<ModalWindowComponent>) {}
 }
 
-
-
 //Copyright (c) 2017 Alex Tranchenko. All rights reserved.
 //MIT License.

@@ -1,6 +1,5 @@
 import {Component} from "@angular/core";
 import "hammerjs";
-import {Router} from "@angular/router";
 import {Store} from "./store/store";
 
 @Component({
@@ -15,10 +14,10 @@ import {Store} from "./store/store";
             <nav>
                 <ul class="nav">
                     <li class="nav__el">
-                        <a routerLink="/instruction" routerLinkActive="active" [class.activeR]="active" class="nav_link link" #intro>Introduction</a>
+                        <a routerLink="/instruction" routerLinkActive="active" [class.activeR]="active" class="nav_link link">Introduction</a>
                     </li>
                     <li class="nav__el">
-                        <a routerLink="/modeling" routerLinkActive="active" [class.activeR]="active" class="nav_link link" #mode>Modeling</a>
+                        <a routerLink="/modeling" routerLinkActive="active" [class.activeR]="active" class="nav_link link">Modeling</a>
                     </li>
                 </ul>
             </nav>
@@ -32,7 +31,6 @@ import {Store} from "./store/store";
 
 export class AppComponent<T> {
     constructor(
-        private router: Router,
         private store: Store<T>
     ){}
     onSwipe(e: HammerInput){

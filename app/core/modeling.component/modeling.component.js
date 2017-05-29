@@ -34,7 +34,7 @@ var ModelingComponent = (function () {
         this.store = store;
         this.routeAnimationRight = true;
         this.position = 'absolute';
-        this.varSetter(this.store.manager());
+        this.varSetter(this.store.manager({ svg_attrs: [['preserveAspectRatio', 'xMidYMid meet'], ['viewBox', '0 0 305 305'], ['height', '100%'], ['width', specific_service_1.SpecificService.dimension(0.35, 0.4)]] }));
     }
     // Set event listener on the host.
     ModelingComponent.prototype.clickHandler = function (e) {
@@ -55,11 +55,11 @@ var ModelingComponent = (function () {
         // Generate graph while rendering page.
         this.render(this.inputs, this.GV);
         // Function debounceTime(). Define invoked func. and timeout.
-        var dT = monad_ts_1.debounceTime(this.onLaunch, 500);
+        var dT = monad_ts_1.debounceTime(this.onLaunch, 400);
         // Button 'Launch' handler. Produce D3 Graph after clicking and manage spinner.
         this.subsToEvent = Observable_1.Observable.fromEvent(this.launch.nativeElement, 'click')
             .subscribe(function () {
-            // To pass `this` to onLaunch().
+            // Passing `this` to onLaunch().
             dT(_this);
         }, function (e) { _this.ES.handleError(e); });
     };
@@ -67,7 +67,7 @@ var ModelingComponent = (function () {
     ModelingComponent.prototype.varSetter = function (v) {
         (this.SVG_COMPS = v.SVG_COMPS, this.svg_attrs = v.svg_attrs, this.MW_TITLE = v.MW_TITLE, this.TOOLTIP_POS = v.TOOLTIP_POS, this.TOOLTIP_D = v.TOOLTIP_D, this.spn_tgl = v.spn_tgl, this.spn_state_val = v.spn_state_val, this.inputs = v.inputs);
     };
-    // Launch button event handler. To pass `this` through debounceTime(), takes it as argument.
+    // Launch button event handler. `this` passed through debounceTime(),  it takes it as argument.
     ModelingComponent.prototype.onLaunch = function (self) {
         var F = new monad_ts_1.AsyncFlow(0)
             .bind(function () {
