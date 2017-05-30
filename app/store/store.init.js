@@ -14,7 +14,6 @@ exports.INIT_STATE = {
     spn_tgl: 'out',
     spn_state_val: 0,
     inputs: exports.inputsInit,
-    currentUrl: [''],
     TOOLTIP_D: 100,
     TOOLTIP_POS: 'above',
     MW_TITLE: "Graph",

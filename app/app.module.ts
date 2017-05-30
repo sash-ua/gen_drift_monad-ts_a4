@@ -13,7 +13,7 @@ import {SharedModule} from "./shared/shared.module";
 import {AppComponent} from "./AppComponent";
 import {ErrorHandlerService} from "./services/error.handler.service";
 import {HammerConfig} from "./app.configs/hammerjs.config";
-import {StoreModule} from "./store/store.module";
+import {StoreModule} from "angust";
 
 import {INIT_STATE} from "./store/store.init";
 
@@ -26,7 +26,7 @@ import {INIT_STATE} from "./store/store.init";
         CoreModule,
         BrowserAnimationsModule,
         MyMaterialModule,
-        StoreModule.provideStore(INIT_STATE),
+        StoreModule.forRoot(INIT_STATE),
     ],
     declarations: [
         AppComponent

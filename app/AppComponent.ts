@@ -1,6 +1,6 @@
 import {Component} from "@angular/core";
 import "hammerjs";
-import {Store} from "./store/store";
+import {Store} from "angust";
 
 @Component({
     moduleId: module.id,
@@ -35,9 +35,9 @@ export class AppComponent<T> {
     ){}
     onSwipe(e: HammerInput){
         if(e.offsetDirection === 4){
-            this.store.navigateTo((['instruction']));
+            this.store.navigateTo(('instruction'));
         } else if (e.offsetDirection === 2){
-            this.store.navigateTo((['modeling']));
+            this.store.navigateTo(('modeling'));
         }
     }
 }

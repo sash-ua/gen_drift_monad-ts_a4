@@ -19,7 +19,7 @@ var dom_service_1 = require("../../services/dom.service");
 var animations_service_1 = require("../../services/animations.service");
 var specific_service_1 = require("../../services/specific.service");
 var material_1 = require("@angular/material");
-var store_1 = require("../../store/store");
+var angust_1 = require("angust");
 var monad_ts_1 = require("monad-ts");
 var ModelingComponent = (function () {
     function ModelingComponent(D3, CS, ES, SS, DS, DOMS, renderer, dialog, store) {
@@ -164,7 +164,7 @@ ModelingComponent = __decorate([
         dom_service_1.DOMService,
         core_1.Renderer2,
         material_1.MdDialog,
-        store_1.Store])
+        angust_1.Store])
 ], ModelingComponent);
 exports.ModelingComponent = ModelingComponent;
 //Copyright (c) 2017 Alex Tranchenko. All rights reserved.

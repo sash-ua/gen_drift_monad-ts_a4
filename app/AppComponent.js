@@ -11,17 +11,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 require("hammerjs");
-var store_1 = require("./store/store");
+var angust_1 = require("angust");
 var AppComponent = (function () {
     function AppComponent(store) {
         this.store = store;
     }
     AppComponent.prototype.onSwipe = function (e) {
         if (e.offsetDirection === 4) {
-            this.store.navigateTo((['instruction']));
+            this.store.navigateTo(('instruction'));
         }
         else if (e.offsetDirection === 2) {
-            this.store.navigateTo((['modeling']));
+            this.store.navigateTo(('modeling'));
         }
     };
     return AppComponent;
@@ -34,7 +34,7 @@ AppComponent = __decorate([
         styleUrls: ['app.component.css'],
         providers: []
     }),
-    __metadata("design:paramtypes", [store_1.Store])
+    __metadata("design:paramtypes", [angust_1.Store])
 ], AppComponent);
 exports.AppComponent = AppComponent;
 //Copyright (c) 2017 Alex Tranchenko. All rights reserved.

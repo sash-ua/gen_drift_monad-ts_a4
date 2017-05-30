@@ -13,7 +13,7 @@ import {SpecificService} from "../../services/specific.service";
 
 import {MdDialog} from "@angular/material";
 import {Subscription} from "rxjs/Subscription";
-import {Store} from "../../store/store";
+import {Store} from "angust";
 import {AsyncFlow, wait, debounceTime} from "monad-ts";
 import {StateStore} from "../../store/store.init";
 

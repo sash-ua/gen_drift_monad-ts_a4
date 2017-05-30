@@ -1,7 +1,6 @@
 import {ArrAttrSetter, Inputs} from "../types/types";
-import {S} from "./interfaces/s";
 
-export interface StateStore extends S{
+export interface StateStore{
     TOOLTIP_D: number;
     TOOLTIP_POS: string;
     MW_TITLE: string ;
@@ -27,7 +26,6 @@ export const INIT_STATE: StateStore = {
     spn_tgl: 'out',
     spn_state_val: 0,
     inputs: inputsInit,
-    currentUrl: [''],
     TOOLTIP_D: 100,
     TOOLTIP_POS: 'above',
     MW_TITLE: "Graph",
